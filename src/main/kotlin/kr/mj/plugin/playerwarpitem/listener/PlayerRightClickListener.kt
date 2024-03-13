@@ -4,6 +4,7 @@ import kr.hqservice.framework.nms.extension.getNmsItemStack
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -47,6 +48,7 @@ class PlayerRightClickListener : Listener {
             val block = player.inventory.itemInMainHand
             if (block.type.isItem) {
                 player.teleport(loc)
+                player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
                 wrapItem.amount--
 
                 player.sendMessage("§a해당 위치로 이동 하였습니다.")
