@@ -1,12 +1,12 @@
-  name: kj.mj.plugin.player_warp_item.PlayerWarpItem
-  main: PlayerWarpItem
-  version: 1.0.0
-  api-version: 1.20
-  description: 아이템 우클릭 시 워프
+main: kr.mj.plugin.playerwarpitem.PlayerWarpItem
+name: PlayerWarpItem
+version: 1.0.0
+api-version: 1.20
+description: 아이템 우클릭 시 워프
 
-  commands:
-    워프아이템:
-      permission: op
+commands:
+  워프아이템설정:
+    permission: op
 
 depend:
   - HQFramework
