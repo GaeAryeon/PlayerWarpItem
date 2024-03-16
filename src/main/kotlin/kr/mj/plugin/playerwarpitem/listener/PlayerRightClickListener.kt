@@ -7,11 +7,11 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
 class PlayerRightClickListener : Listener {
+
     @EventHandler
     fun rightClickWrap(event: PlayerInteractEvent) {
         // 플레이어가 우클릭, 좌클릭, 발판 밟기
@@ -27,32 +27,30 @@ class PlayerRightClickListener : Listener {
 
         if (event.hand != EquipmentSlot.HAND) return
         // 위 조건문을 통해 이 이벤트가 두 번 실행되는 것을 방지
-        if (event.action == Action.RIGHT_CLICK_BLOCK || event.action == Action.RIGHT_CLICK_AIR) {
+        if (!event.action.name.contains("RIGHT")) return
 
-            val player = event.player
+        val player = event.player
 
-            val wrapItem = player.inventory.itemInMainHand
-            if (wrapItem.type == Material.AIR) return
+        val wrapItem = player.inventory.itemInMainHand
+        if (wrapItem.type == Material.AIR) return
 
-            val tag = wrapItem.getNmsItemStack().getTagOrNull() ?: return
-            if (!tag.hasKey("X") && !tag.hasKey("Y") && !tag.hasKey("Z")) return
+        val tag = wrapItem.getNmsItemStack().getTagOrNull() ?: return
+        if (!tag.hasKey("X") && !tag.hasKey("Y") && !tag.hasKey("Z")) return
 
-            val coordinateX = tag.getDouble("X")
-            val coordinateY = tag.getDouble("Y")
-            val coordinateZ = tag.getDouble("Z")
-            val direction1 = tag.getFloat("DIRECTION1")
-            val direction2 = tag.getFloat("DIRECTION2")
+        val coordinateX = tag.getDouble("X")
+        val coordinateY = tag.getDouble("Y")
+        val coordinateZ = tag.getDouble("Z")
+        val direction1 = tag.getFloat("DIRECTION1")
+        val direction2 = tag.getFloat("DIRECTION2")
 
-            val loc = Location(Bukkit.getWorld("world"), coordinateX, coordinateY, coordinateZ, direction1, direction2)
+        val loc = Location(Bukkit.getWorld("world"), coordinateX, coordinateY, coordinateZ, direction1, direction2)
 
-            val block = player.inventory.itemInMainHand
-            if (block.type.isItem) {
-                player.teleport(loc)
-                player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
-                wrapItem.amount--
+        event.isCancelled = true
 
-                player.sendMessage("§a해당 위치로 이동 하였습니다.")
-            }
-        }
+        player.teleport(loc)
+        player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
+        wrapItem.amount--
+
+        player.sendMessage("§a해당 위치로 이동 하였습니다.")
     }
 }
